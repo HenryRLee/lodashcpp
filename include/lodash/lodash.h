@@ -8,10 +8,10 @@
 namespace lodash {
   class lodash {
     template<typename T>
-    class chain_type;
+    class Chain;
    public:
     template<typename T>
-    static chain_type<T> chain(T value) { return chain_type<T>(value); }
+    static Chain<T> chain(T value) { return Chain<T>(value); }
 
     constexpr static auto identity = [](const auto& any) { return any; };
 
@@ -65,9 +65,9 @@ namespace lodash {
 
    private:
     template<typename T>
-    class chain_type {
+    class Chain {
      public:
-      chain_type(T value) : value_(value) {}
+      Chain(T value) : value_(value) {}
 
       T value() { return value_; }
 
@@ -78,7 +78,7 @@ namespace lodash {
 
       // Array
       auto first() {
-        return lodash::chain_type(lodash::head(value_));
+        return lodash::Chain(lodash::head(value_));
       }
 
       auto head() {
@@ -86,7 +86,7 @@ namespace lodash {
       }
 
       auto last() {
-        return lodash::chain_type(lodash::last(value_));
+        return lodash::Chain(lodash::last(value_));
       }
 
       auto take(int n = 1) {
@@ -96,15 +96,15 @@ namespace lodash {
 
       // Object
       auto get(const std::any& path) {
-        return lodash::chain_type(lodash::get(value_, path));
+        return lodash::Chain(lodash::get(value_, path));
       }
 
       auto has(const std::any& path) {
-        return lodash::chain_type(lodash::has(value_, path));
+        return lodash::Chain(lodash::has(value_, path));
       }
 
       auto set(const std::any& path, const std::any& value) {
-        return lodash::chain_type(lodash::set(value_, path, value));
+        return lodash::Chain(lodash::set(value_, path, value));
       }
 
      private:
