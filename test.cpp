@@ -57,10 +57,38 @@ void testSet() {
   assert(b == _.chain(a).set("key3", 3).value());
 }
 
+void testPartial() {
+  auto add = [](auto a, auto b) {
+    return a + b;
+  };
+
+  auto addPartial = _.partial(add);
+
+  assert(3 == addPartial(1, 2));
+  assert(3 == addPartial(1)(2));
+
+  auto addOneTwo = _.partial(add, 1, 2);
+
+  assert(3 == addOneTwo());
+}
+
+void testCurry() {
+  auto add = [](auto a, auto b) {
+    return a + b;
+  };
+
+  auto addCurry = _.curry(add);
+
+  assert(3 == addCurry(1)(2));
+  assert(3 == addCurry(1, 2));
+}
+
 int main() {
   testIdentity();
   testFirst();
   testHead();
   testLast();
   testTake();
+  testPartial();
+  testCurry();
 }

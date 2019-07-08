@@ -4,6 +4,7 @@
 #include <string>
 #include <any>
 #include <variant>
+#include <functional>
 
 namespace lodash {
   class lodash {
@@ -62,6 +63,39 @@ namespace lodash {
       object[std::any_cast<key_type>(path)] = std::any_cast<mapped_type>(value);
       return object;
     };
+
+    // Function
+    template<typename Fn,
+             std::enable_if_t<std::is_invocable<Fn>::value, int> = 0>
+    constexpr decltype(auto) curry(Fn f) {
+        return f();
+    }
+
+    template<typename Fn,
+             std::enable_if_t<!std::is_invocable<Fn>::value, int> = 0>
+    constexpr decltype(auto) curry(Fn f) {
+      return [=](auto&&... x) {
+        return curry(
+          [=](auto&&... xs) -> decltype(f(x..., xs...)) {
+            return f(x..., xs...);
+          }
+        );
+      };
+    }
+
+    template<typename Fn, typename... Args,
+             std::enable_if_t<std::is_invocable<Fn, Args...>::value, int> = 0>
+    constexpr decltype(auto) partial(Fn f, Args&&... x) {
+        return [=](auto&&... xs) -> decltype(f(x..., xs...)) {
+          return f(x..., xs...);
+        };
+    }
+
+    template<typename Fn, typename... Args,
+             std::enable_if_t<!std::is_invocable<Fn, Args...>::value, int> = 0>
+    constexpr decltype(auto) partial(Fn f, Args... args) {
+      return curry(f);
+    }
 
    private:
     template<typename T>
