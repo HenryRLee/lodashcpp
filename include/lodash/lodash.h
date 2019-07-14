@@ -38,12 +38,9 @@ namespace lodash {
     // Object
 
     constexpr static auto get =
-      [](const auto& object, const std::any& path) {
-      typedef typename
-        std::remove_reference<decltype(object)>::type::key_type key_type;
+      [](const auto& object, const auto& key) {
       typedef typename
         std::remove_reference<decltype(object)>::type::mapped_type mapped_type;
-      auto key = std::any_cast<key_type>(path);
       if (object.find(key) != object.end()) {
         return object.find(key)->second;
       } else {
@@ -52,19 +49,13 @@ namespace lodash {
     };
 
     constexpr static auto has =
-      [](const auto& object, const std::any& path) {
-      typedef typename
-        std::remove_reference<decltype(object)>::type::key_type key_type;
-      return object.find(std::any_cast<key_type>(path)) != object.end();
+      [](const auto& object, const auto& key) {
+      return object.find(key) != object.end();
     };
 
     constexpr static auto set =
-      [](auto& object, const std::any& path, const std::any& value) {
-      typedef typename
-        std::remove_reference<decltype(object)>::type::key_type key_type;
-      typedef typename
-        std::remove_reference<decltype(object)>::type::mapped_type mapped_type;
-      object[std::any_cast<key_type>(path)] = std::any_cast<mapped_type>(value);
+      [](auto& object, const auto& key, const auto& value) {
+      object[key] = value;
       return object;
     };
 
@@ -184,16 +175,19 @@ namespace lodash {
 
       // Object
 
-      auto get(const std::any& path) {
-        return lodash::Chain(lodash::get(value_, path));
+      template<typename K>
+      auto get(const K& key) {
+        return lodash::Chain(lodash::get(value_, key));
       }
 
-      auto has(const std::any& path) {
-        return lodash::Chain(lodash::has(value_, path));
+      template<typename K>
+      auto has(const K& key) {
+        return lodash::Chain(lodash::has(value_, key));
       }
 
-      auto set(const std::any& path, const std::any& value) {
-        return lodash::Chain(lodash::set(value_, path, value));
+      template<typename K, typename V>
+      auto set(const K& key, const V& value) {
+        return lodash::Chain(lodash::set(value_, key, value));
       }
 
      private:

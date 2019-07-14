@@ -139,6 +139,9 @@ int main() {
   testHead();
   testLast();
   testTake();
+  testGet();
+  testHas();
+  testSet();
   testIsEqual();
   testIsMatch();
   testCurry();
