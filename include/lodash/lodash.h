@@ -14,16 +14,12 @@ namespace lodash {
     template<typename T>
     static Chain<T> chain(T value) { return Chain<T>(value); }
 
-    // Lang
-
-    constexpr static auto isEqual = [](const auto& value, const auto& other) {
-      return value == other;
-    };
-
     // Util
+
     constexpr static auto identity = [](const auto& any) { return any; };
 
     // Array
+
     constexpr static auto first = [](const auto& array) {
       return array.front();
     };
@@ -40,6 +36,7 @@ namespace lodash {
     };
 
     // Object
+
     constexpr static auto get =
       [](const auto& object, const std::any& path) {
       typedef typename
@@ -71,7 +68,24 @@ namespace lodash {
       return object;
     };
 
+    // Lang
+
+    constexpr static auto isEqual = [](const auto& value, const auto& other) {
+      return value == other;
+    };
+
+    constexpr static auto isMatch = [](const auto& object, const auto& source) {
+      for (auto it = source.begin(); it != source.end(); it++) {
+        const auto& [key, value] = *it;
+        if (!lodash::isEqual(lodash::get(object, key), value))
+          return false;
+      }
+
+      return true;
+    };
+
     // Function
+
     template<typename Fn,
              std::enable_if_t<std::is_invocable<Fn>::value, int> = 0>
     constexpr decltype(auto) curry(Fn f) {
@@ -150,6 +164,7 @@ namespace lodash {
       }
 
       // Array
+
       auto first() {
         return lodash::Chain(lodash::head(value_));
       }
@@ -168,6 +183,7 @@ namespace lodash {
       }
 
       // Object
+
       auto get(const std::any& path) {
         return lodash::Chain(lodash::get(value_, path));
       }

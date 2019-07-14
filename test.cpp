@@ -6,13 +6,6 @@
 
 using namespace lodash;
 
-void testIsEqual() {
-  std::map<std::string, int> a = {{"a", 1}, {"b", 2}};
-  std::map<std::string, int> b = {{"a", 1}, {"b", 2}};
-
-  assert(_.isEqual(a, b));
-}
-
 void testIdentity() {
   int a = 1;
 
@@ -62,6 +55,22 @@ void testSet() {
   std::map<std::string, int> b{{"key1", 1}, {"key2", 2}, {"key3", 3}};
 
   assert(b == _.chain(a).set("key3", 3).value());
+}
+
+void testIsEqual() {
+  std::map<std::string, int> a = {{"a", 1}, {"b", 2}};
+  std::map<std::string, int> b = {{"a", 1}, {"b", 2}};
+
+  assert(_.isEqual(a, b));
+}
+
+void testIsMatch() {
+  std::map<std::string, int> a = {{"a", 1}, {"b", 2}, {"c", 3}};
+  std::map<std::string, int> b = {{"a", 1}, {"b", 2}};
+  std::map<std::string, int> c = {{"b", 1}, {"c", 2}};
+
+  assert(_.isMatch(a, b));
+  assert(!_.isMatch(a, c));
 }
 
 void testCurry() {
@@ -125,12 +134,13 @@ void testPartialRight() {
 }
 
 int main() {
-  testIsEqual();
   testIdentity();
   testFirst();
   testHead();
   testLast();
   testTake();
+  testIsEqual();
+  testIsMatch();
   testCurry();
   testCurryRight();
   testPartial();
