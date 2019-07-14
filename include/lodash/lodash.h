@@ -165,6 +165,10 @@ namespace lodash {
       return lodash::matches(source);
     }
 
+    constexpr static auto property = [](const auto& path) {
+      return lodash::partialRight(lodash::get, path);
+    };
+
    private:
     template<typename T>
     class Chain {

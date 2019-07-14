@@ -157,6 +157,14 @@ void testMatchesProperty() {
   assert(!_.matchesProperty(2, 30)(b));
 }
 
+void testProperty() {
+  std::map<std::string, int> a = {{"a", 1}, {"b", 2}, {"c", 3}};
+
+  assert(1 == _.property("a")(a));
+  assert(2 == _.property("b")(a));
+  assert(3 == _.property("c")(a));
+}
+
 int main() {
   testFirst();
   testHead();
@@ -174,4 +182,5 @@ int main() {
   testIdentity();
   testMatches();
   testMatchesProperty();
+  testProperty();
 }
