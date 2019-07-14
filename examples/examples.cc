@@ -1,4 +1,4 @@
-#include "include/lodash/lodash.h"
+#include "lodash/lodash.h"
 #include <vector>
 #include <map>
 #include <string>
@@ -6,25 +6,25 @@
 
 using namespace lodash;
 
-void testFirst() {
+void First() {
   std::vector<int> a{1, 2, 3};
 
   assert(1 == _.chain(a).first().value());
 }
 
-void testHead() {
+void Head() {
   std::vector<int> a{1, 2, 3};
 
   assert(1 == _.chain(a).head().value());
 }
 
-void testLast() {
+void Last() {
   std::vector<int> a{1, 2, 3};
 
   assert(3 == _.chain(a).last().value());
 }
 
-void testTake() {
+void Take() {
   std::vector<int> a{1, 2, 3};
 
   std::vector<int> b{1, 2};
@@ -32,33 +32,33 @@ void testTake() {
   assert(b == _.chain(a).take(2).value());
 }
 
-void testGet() {
+void Get() {
   std::map<std::string, int> a{{"key1", 1}, {"key2", 2}};
 
   assert(1 == _.chain(a).get("key1").value());
 }
 
-void testHas() {
+void Has() {
   std::map<std::string, int> a{{"key1", 1}, {"key2", 2}};
 
   assert(_.chain(a).has("key1").value());
 }
 
-void testSet() {
+void Set() {
   std::map<std::string, int> a{{"key1", 1}, {"key2", 2}};
   std::map<std::string, int> b{{"key1", 1}, {"key2", 2}, {"key3", 3}};
 
   assert(b == _.chain(a).set("key3", 3).value());
 }
 
-void testIsEqual() {
+void IsEqual() {
   std::map<std::string, int> a = {{"a", 1}, {"b", 2}};
   std::map<std::string, int> b = {{"a", 1}, {"b", 2}};
 
   assert(_.isEqual(a, b));
 }
 
-void testIsMatch() {
+void IsMatch() {
   std::map<std::string, int> a = {{"a", 1}, {"b", 2}, {"c", 3}};
   std::map<std::string, int> b = {{"a", 1}, {"b", 2}};
   std::map<std::string, int> c = {{"b", 1}, {"c", 2}};
@@ -67,7 +67,7 @@ void testIsMatch() {
   assert(!_.isMatch(a, c));
 }
 
-void testCurry() {
+void Curry() {
   auto add = [](auto a, auto b) {
     return a + b;
   };
@@ -78,7 +78,7 @@ void testCurry() {
   assert(3 == addCurry(1, 2));
 }
 
-void testCurryRight() {
+void CurryRight() {
   auto abc = [](int a, int b, int c) {
     return std::vector<int>{a, b, c};
   };
@@ -92,7 +92,7 @@ void testCurryRight() {
   assert(a == abcCurry(1, 2, 3));
 }
 
-void testPartial() {
+void Partial() {
   auto add = [](auto a, auto b) {
     return a + b;
   };
@@ -111,7 +111,7 @@ void testPartial() {
   assert(3 == addOneTwo());
 }
 
-void testPartialRight() {
+void PartialRight() {
   auto abc = [](int a, int b, int c) {
     return std::vector<int>{a, b, c};
   };
@@ -127,13 +127,13 @@ void testPartialRight() {
   assert(a == abcPartial(1, 2));
 }
 
-void testIdentity() {
+void Identity() {
   int a = 1;
 
   assert(a == _.chain(a).identity().value());
 }
 
-void testMatches() {
+void Matches() {
   std::map<std::string, int> a = {{"a", 1}, {"b", 2}, {"c", 3}};
   std::map<std::string, int> b = {{"a", 1}, {"b", 2}};
   std::map<std::string, int> c = {{"b", 1}, {"c", 2}};
@@ -145,7 +145,7 @@ void testMatches() {
   assert(!matchesC(a));
 }
 
-void testMatchesProperty() {
+void MatchesProperty() {
   std::map<std::string, int> a = {{"a", 1}, {"b", 2}, {"c", 3}};
 
   assert(_.matchesProperty("b", 2)(a));
@@ -157,7 +157,7 @@ void testMatchesProperty() {
   assert(!_.matchesProperty(2, 30)(b));
 }
 
-void testProperty() {
+void Property() {
   std::map<std::string, int> a = {{"a", 1}, {"b", 2}, {"c", 3}};
 
   assert(1 == _.property("a")(a));
@@ -166,21 +166,21 @@ void testProperty() {
 }
 
 int main() {
-  testFirst();
-  testHead();
-  testLast();
-  testTake();
-  testGet();
-  testHas();
-  testSet();
-  testIsEqual();
-  testIsMatch();
-  testCurry();
-  testCurryRight();
-  testPartial();
-  testPartialRight();
-  testIdentity();
-  testMatches();
-  testMatchesProperty();
-  testProperty();
+  First();
+  Head();
+  Last();
+  Take();
+  Get();
+  Has();
+  Set();
+  IsEqual();
+  IsMatch();
+  Curry();
+  CurryRight();
+  Partial();
+  PartialRight();
+  Identity();
+  Matches();
+  MatchesProperty();
+  Property();
 }
