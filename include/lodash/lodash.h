@@ -14,6 +14,13 @@ namespace lodash {
     template<typename T>
     static Chain<T> chain(T value) { return Chain<T>(value); }
 
+    // Lang
+
+    constexpr static auto isEqual = [](const auto& value, const auto& other) {
+      return value == other;
+    };
+
+    // Util
     constexpr static auto identity = [](const auto& any) { return any; };
 
     // Array

@@ -6,6 +6,13 @@
 
 using namespace lodash;
 
+void testIsEqual() {
+  std::map<std::string, int> a = {{"a", 1}, {"b", 2}};
+  std::map<std::string, int> b = {{"a", 1}, {"b", 2}};
+
+  assert(_.isEqual(a, b));
+}
+
 void testIdentity() {
   int a = 1;
 
@@ -84,6 +91,7 @@ void testCurry() {
 }
 
 int main() {
+  testIsEqual();
   testIdentity();
   testFirst();
   testHead();
