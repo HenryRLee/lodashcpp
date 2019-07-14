@@ -6,12 +6,6 @@
 
 using namespace lodash;
 
-void testIdentity() {
-  int a = 1;
-
-  assert(a == _.chain(a).identity().value());
-}
-
 void testFirst() {
   std::vector<int> a{1, 2, 3};
 
@@ -133,8 +127,25 @@ void testPartialRight() {
   assert(a == abcPartial(1, 2));
 }
 
+void testIdentity() {
+  int a = 1;
+
+  assert(a == _.chain(a).identity().value());
+}
+
+void testMatches() {
+  std::map<std::string, int> a = {{"a", 1}, {"b", 2}, {"c", 3}};
+  std::map<std::string, int> b = {{"a", 1}, {"b", 2}};
+  std::map<std::string, int> c = {{"b", 1}, {"c", 2}};
+
+  auto matchesB = _.matches(b);
+  assert(matchesB(a));
+
+  auto matchesC = _.matches(c);
+  assert(!matchesC(a));
+}
+
 int main() {
-  testIdentity();
   testFirst();
   testHead();
   testLast();
@@ -148,4 +159,6 @@ int main() {
   testCurryRight();
   testPartial();
   testPartialRight();
+  testIdentity();
+  testMatches();
 }

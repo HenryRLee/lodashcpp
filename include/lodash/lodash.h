@@ -14,10 +14,6 @@ namespace lodash {
     template<typename T>
     static Chain<T> chain(T value) { return Chain<T>(value); }
 
-    // Util
-
-    constexpr static auto identity = [](const auto& any) { return any; };
-
     // Array
 
     constexpr static auto first = [](const auto& array) {
@@ -79,13 +75,13 @@ namespace lodash {
 
     template<typename Fn,
              std::enable_if_t<std::is_invocable<Fn>::value, int> = 0>
-    constexpr decltype(auto) curry(Fn f) {
+    constexpr static decltype(auto) curry(Fn f) {
         return f();
     }
 
     template<typename Fn,
              std::enable_if_t<!std::is_invocable<Fn>::value, int> = 0>
-    constexpr decltype(auto) curry(Fn f) {
+    constexpr static decltype(auto) curry(Fn f) {
       return [=](auto&&... x) {
         return curry(
           [=](auto&&... xs) -> decltype(f(x..., xs...)) {
@@ -97,13 +93,13 @@ namespace lodash {
 
     template<typename Fn,
              std::enable_if_t<std::is_invocable<Fn>::value, int> = 0>
-    constexpr decltype(auto) curryRight(Fn f) {
+    constexpr static decltype(auto) curryRight(Fn f) {
         return f();
     }
 
     template<typename Fn,
              std::enable_if_t<!std::is_invocable<Fn>::value, int> = 0>
-    constexpr decltype(auto) curryRight(Fn f) {
+    constexpr static decltype(auto) curryRight(Fn f) {
       return [=](auto&&... x) {
         return curryRight(
           [=](auto&&... xs) -> decltype(f(xs..., x...)) {
@@ -115,7 +111,7 @@ namespace lodash {
 
     template<typename Fn, typename... Args,
              std::enable_if_t<std::is_invocable<Fn, Args...>::value, int> = 0>
-    constexpr decltype(auto) partial(Fn f, Args&&... x) {
+    constexpr static decltype(auto) partial(Fn f, Args&&... x) {
         return [=]() -> decltype(f(x...)) {
           return f(x...);
         };
@@ -123,13 +119,13 @@ namespace lodash {
 
     template<typename Fn, typename... Args,
              std::enable_if_t<!std::is_invocable<Fn, Args...>::value, int> = 0>
-    constexpr decltype(auto) partial(Fn f, Args... args) {
+    constexpr static decltype(auto) partial(Fn f, Args... args) {
       return curry(f)(args...);
     }
 
     template<typename Fn, typename... Args,
              std::enable_if_t<std::is_invocable<Fn, Args...>::value, int> = 0>
-    constexpr decltype(auto) partialRight(Fn f, Args&&... x) {
+    constexpr static decltype(auto) partialRight(Fn f, Args&&... x) {
         return [=]() -> decltype(f(x...)) {
           return f(x...);
         };
@@ -137,9 +133,17 @@ namespace lodash {
 
     template<typename Fn, typename... Args,
              std::enable_if_t<!std::is_invocable<Fn, Args...>::value, int> = 0>
-    constexpr decltype(auto) partialRight(Fn f, Args... args) {
+    constexpr static decltype(auto) partialRight(Fn f, Args... args) {
       return curryRight(f)(args...);
     }
+
+    // Util
+
+    constexpr static auto identity = [](const auto& any) { return any; };
+
+    constexpr static auto matches = [](const auto& source) {
+      return lodash::partialRight(lodash::isMatch, source);
+    };
 
    private:
     template<typename T>
