@@ -111,15 +111,15 @@ namespace lodash {
     template<typename Fn, typename... Args,
              std::enable_if_t<std::is_invocable<Fn, Args...>::value, int> = 0>
     constexpr decltype(auto) partial(Fn f, Args&&... x) {
-        return [=](auto&&... xs) -> decltype(f(x..., xs...)) {
-          return f(x..., xs...);
+        return [=]() -> decltype(f(x...)) {
+          return f(x...);
         };
     }
 
     template<typename Fn, typename... Args,
              std::enable_if_t<!std::is_invocable<Fn, Args...>::value, int> = 0>
     constexpr decltype(auto) partial(Fn f, Args... args) {
-      return curry(f);
+      return curry(f)(args...);
     }
 
    private:

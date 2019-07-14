@@ -99,11 +99,9 @@ void testPartial() {
   assert(3 == addPartial(1, 2));
   assert(3 == addPartial(1)(2));
 
-  /*
   auto addOne = _.partial(add, 1);
 
   assert(3 == addOne(2));
-  */
 
   auto addOneTwo = _.partial(add, 1, 2);
 
