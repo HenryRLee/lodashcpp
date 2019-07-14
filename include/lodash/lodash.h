@@ -122,6 +122,20 @@ namespace lodash {
       return curry(f)(args...);
     }
 
+    template<typename Fn, typename... Args,
+             std::enable_if_t<std::is_invocable<Fn, Args...>::value, int> = 0>
+    constexpr decltype(auto) partialRight(Fn f, Args&&... x) {
+        return [=]() -> decltype(f(x...)) {
+          return f(x...);
+        };
+    }
+
+    template<typename Fn, typename... Args,
+             std::enable_if_t<!std::is_invocable<Fn, Args...>::value, int> = 0>
+    constexpr decltype(auto) partialRight(Fn f, Args... args) {
+      return curryRight(f)(args...);
+    }
+
    private:
     template<typename T>
     class Chain {

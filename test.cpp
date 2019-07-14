@@ -108,6 +108,22 @@ void testPartial() {
   assert(3 == addOneTwo());
 }
 
+void testPartialRight() {
+  auto abc = [](int a, int b, int c) {
+    return std::vector<int>{a, b, c};
+  };
+
+  std::vector<int> a{1, 2, 3};
+
+  assert(a == _.partialRight(abc, 1, 2, 3)());
+  assert(a == _.partialRight(abc)(3)(2)(1));
+
+  auto abcPartial = _.partialRight(abc, 3);
+
+  assert(a == abcPartial(2)(1));
+  assert(a == abcPartial(1, 2));
+}
+
 int main() {
   testIsEqual();
   testIdentity();
@@ -118,4 +134,5 @@ int main() {
   testCurry();
   testCurryRight();
   testPartial();
+  testPartialRight();
 }
