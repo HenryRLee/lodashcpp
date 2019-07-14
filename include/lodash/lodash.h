@@ -8,8 +8,8 @@
 
 namespace lodash {
   class lodash {
-    template<typename T>
-    class Chain;
+    template<typename T> class Chain;
+    template<typename T> struct is_primitive;
    public:
     template<typename T>
     static Chain<T> chain(T value) { return Chain<T>(value); }
@@ -169,6 +169,28 @@ namespace lodash {
       return lodash::partialRight(lodash::get, path);
     };
 
+    template<typename K, typename V>
+    constexpr static auto iteratee(const std::map<K, V>& object) {
+      return lodash::matches(object);
+    }
+
+    template<typename K, typename V>
+    constexpr static auto iteratee(const std::pair<K, V>& pair) {
+      return lodash::matchesProperty(pair.first, pair.second);
+    }
+
+    template<typename K,
+             std::enable_if_t<lodash::is_primitive<K>::value, int> = 0>
+    constexpr static auto iteratee(const K& key) {
+      return lodash::property(key);
+    }
+
+    template<typename Fn,
+             std::enable_if_t<!lodash::is_primitive<Fn>::value, int> = 0>
+    constexpr static auto iteratee(Fn func) {
+      return func;
+    }
+
    private:
     template<typename T>
     class Chain {
@@ -221,6 +243,12 @@ namespace lodash {
      private:
       T value_;
     };
+
+    template<typename T>
+    struct is_primitive : std::integral_constant<bool,
+                                                 std::is_arithmetic<T>::value ||
+                                                 std::is_enum<T>::value ||
+                                                 std::is_same<T, std::string>::value> {};
   };
 
   lodash _;

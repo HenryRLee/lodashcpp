@@ -165,6 +165,24 @@ void Property() {
   assert(3 == _.property("c")(a));
 }
 
+void Iteratee() {
+  std::map<std::string, int> a = {{"a", 1}, {"b", 2}, {"c", true}};
+
+  auto matches = _.iteratee(std::map<std::string, int>{{"a", 1}});
+  assert(matches(a));
+
+  auto matchesProperty = _.iteratee(std::make_pair("a", 1));
+  assert(matchesProperty(a));
+
+  auto property = _.iteratee("c");
+  assert(matchesProperty(a));
+
+  auto func = _.iteratee([](const auto& object) {
+    return _.get(object, "a") + _.get(object, "b");
+  });
+  assert(3 == func(a));
+}
+
 int main() {
   First();
   Head();
@@ -183,4 +201,5 @@ int main() {
   Matches();
   MatchesProperty();
   Property();
+  Iteratee();
 }
