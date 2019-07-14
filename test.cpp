@@ -145,6 +145,18 @@ void testMatches() {
   assert(!matchesC(a));
 }
 
+void testMatchesProperty() {
+  std::map<std::string, int> a = {{"a", 1}, {"b", 2}, {"c", 3}};
+
+  assert(_.matchesProperty("b", 2)(a));
+  assert(!_.matchesProperty("c", 2)(a));
+
+  std::map<int, int> b = {{1, 10}, {2, 20}, {3, 30}};
+
+  assert(_.matchesProperty(1, 10)(b));
+  assert(!_.matchesProperty(2, 30)(b));
+}
+
 int main() {
   testFirst();
   testHead();
@@ -161,4 +173,5 @@ int main() {
   testPartialRight();
   testIdentity();
   testMatches();
+  testMatchesProperty();
 }

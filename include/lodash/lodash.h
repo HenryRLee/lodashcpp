@@ -145,6 +145,26 @@ namespace lodash {
       return lodash::partialRight(lodash::isMatch, source);
     };
 
+    template<typename K, typename V,
+             std::enable_if_t<std::is_convertible<K, std::string>::value, int> = 0>
+    constexpr static auto matchesProperty(const K& path,
+                                          const V& srcValue) {
+      const std::map<std::string, V> source{
+        {std::string(path), srcValue}
+      };
+      return lodash::matches(source);
+    }
+
+    template<typename K, typename V,
+             std::enable_if_t<!std::is_convertible<K, std::string>::value, int> = 0>
+    constexpr static auto matchesProperty(const K& path,
+                                          const V& srcValue) {
+      const std::map<K, V> source{
+        {path, srcValue}
+      };
+      return lodash::matches(source);
+    }
+
    private:
     template<typename T>
     class Chain {
