@@ -64,21 +64,6 @@ void testSet() {
   assert(b == _.chain(a).set("key3", 3).value());
 }
 
-void testPartial() {
-  auto add = [](auto a, auto b) {
-    return a + b;
-  };
-
-  auto addPartial = _.partial(add);
-
-  assert(3 == addPartial(1, 2));
-  assert(3 == addPartial(1)(2));
-
-  auto addOneTwo = _.partial(add, 1, 2);
-
-  assert(3 == addOneTwo());
-}
-
 void testCurry() {
   auto add = [](auto a, auto b) {
     return a + b;
@@ -90,6 +75,41 @@ void testCurry() {
   assert(3 == addCurry(1, 2));
 }
 
+void testCurryRight() {
+  auto abc = [](int a, int b, int c) {
+    return std::vector<int>{a, b, c};
+  };
+
+  auto abcCurry = _.curryRight(abc);
+
+  std::vector<int> a{1, 2, 3};
+
+  assert(a == abcCurry(3)(2)(1));
+  assert(a == abcCurry(2, 3)(1));
+  assert(a == abcCurry(1, 2, 3));
+}
+
+void testPartial() {
+  auto add = [](auto a, auto b) {
+    return a + b;
+  };
+
+  auto addPartial = _.partial(add);
+
+  assert(3 == addPartial(1, 2));
+  assert(3 == addPartial(1)(2));
+
+  /*
+  auto addOne = _.partial(add, 1);
+
+  assert(3 == addOne(2));
+  */
+
+  auto addOneTwo = _.partial(add, 1, 2);
+
+  assert(3 == addOneTwo());
+}
+
 int main() {
   testIsEqual();
   testIdentity();
@@ -97,6 +117,7 @@ int main() {
   testHead();
   testLast();
   testTake();
-  testPartial();
   testCurry();
+  testCurryRight();
+  testPartial();
 }

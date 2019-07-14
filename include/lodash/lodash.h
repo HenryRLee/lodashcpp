@@ -90,6 +90,24 @@ namespace lodash {
       };
     }
 
+    template<typename Fn,
+             std::enable_if_t<std::is_invocable<Fn>::value, int> = 0>
+    constexpr decltype(auto) curryRight(Fn f) {
+        return f();
+    }
+
+    template<typename Fn,
+             std::enable_if_t<!std::is_invocable<Fn>::value, int> = 0>
+    constexpr decltype(auto) curryRight(Fn f) {
+      return [=](auto&&... x) {
+        return curryRight(
+          [=](auto&&... xs) -> decltype(f(xs..., x...)) {
+            return f(xs..., x...);
+          }
+        );
+      };
+    }
+
     template<typename Fn, typename... Args,
              std::enable_if_t<std::is_invocable<Fn, Args...>::value, int> = 0>
     constexpr decltype(auto) partial(Fn f, Args&&... x) {
