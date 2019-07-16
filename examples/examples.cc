@@ -183,6 +183,15 @@ void Iteratee() {
   assert(3 == func(a));
 }
 
+void ForEach() {
+  std::vector<int> a = {1, 2, 3, 4};
+  std::vector<int> b = {2, 3, 4, 5};
+
+  _.forEach(a, [](int n) { return n + 1; });
+
+  assert(a == b);
+}
+
 int main() {
   First();
   Head();
@@ -202,4 +211,5 @@ int main() {
   MatchesProperty();
   Property();
   Iteratee();
+  ForEach();
 }

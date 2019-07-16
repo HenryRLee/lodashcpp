@@ -191,6 +191,17 @@ namespace lodash {
       return func;
     }
 
+    // Collection
+
+    constexpr static auto each = [](auto& collection,
+                                    const auto& iteratee = lodash::identity) {
+      for (auto it = collection.begin(); it != collection.end(); it++) {
+        *it = iteratee(*it);
+      }
+    };
+
+    constexpr static auto forEach = each;
+
    private:
     template<typename T>
     class Chain {
