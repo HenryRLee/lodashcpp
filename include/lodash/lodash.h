@@ -9,6 +9,7 @@
 namespace lodash {
   class lodash {
     template<typename T> class Chain;
+    template<typename T> struct is_string;
     template<typename T> struct is_primitive;
    public:
     template<typename T>
@@ -146,7 +147,7 @@ namespace lodash {
     };
 
     template<typename K, typename V,
-             std::enable_if_t<std::is_convertible<K, std::string>::value, int> = 0>
+             std::enable_if_t<is_string<K>::value, int> = 0>
     constexpr static auto matchesProperty(const K& path,
                                           const V& srcValue) {
       const std::map<std::string, V> source{
@@ -156,7 +157,7 @@ namespace lodash {
     }
 
     template<typename K, typename V,
-             std::enable_if_t<!std::is_convertible<K, std::string>::value, int> = 0>
+             std::enable_if_t<!is_string<K>::value, int> = 0>
     constexpr static auto matchesProperty(const K& path,
                                           const V& srcValue) {
       const std::map<K, V> source{
@@ -256,10 +257,13 @@ namespace lodash {
     };
 
     template<typename T>
+    struct is_string : std::is_convertible<T, std::string> {};
+
+    template<typename T>
     struct is_primitive : std::integral_constant<bool,
                                                  std::is_arithmetic<T>::value ||
                                                  std::is_enum<T>::value ||
-                                                 std::is_same<T, std::string>::value> {};
+                                                 is_string<T>::value> {};
   };
 
   lodash _;
