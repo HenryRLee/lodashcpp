@@ -12,7 +12,8 @@ namespace lodash {
     template<typename T> class Chain;
     template<typename T> struct is_string;
     template<typename T> struct is_primitive;
-    template<template<typename...> typename Array, typename V> struct convert_array;
+    template<template<typename...> typename Array, typename V>
+      struct convert_array;
    public:
     template<typename T>
     static Chain<T> chain(T value) { return Chain<T>(value); }
@@ -206,11 +207,14 @@ namespace lodash {
 
     template<template<typename...> typename Collection,
              typename Iteratee, typename... Args>
-    constexpr static auto map(const Collection<Args...>& collection, Iteratee iteratee) {
+    constexpr static auto map(const Collection<Args...>& collection,
+                              Iteratee iteratee) {
 
       typedef decltype(lodash::iteratee(iteratee)(
-            std::declval<typename Collection<Args...>::value_type>())) newValueType;
-      typename convert_array<Collection, newValueType>::type newCollection(collection.size());
+          std::declval<typename Collection<Args...>::value_type>()))
+          newValueType;
+      typename convert_array<Collection, newValueType>::type
+          newCollection(collection.size());
 
       std::transform(collection.begin(), collection.end(),
                      newCollection.begin(), lodash::iteratee(iteratee));
