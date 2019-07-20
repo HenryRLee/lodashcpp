@@ -205,6 +205,10 @@ void Map() {
   assert(b == _.map(c, "b"));
 
   assert(b == _.map(a, [](int n) { return n + 1; }));
+
+  assert(a == _.chain(c).map("a").value());
+  assert(b == _.chain(c).map("b").value());
+  assert(b == _.chain(a).map([](int n) { return n + 1; }).value());
 }
 
 int main() {

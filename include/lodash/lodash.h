@@ -287,6 +287,11 @@ namespace lodash {
         return lodash::Chain(lodash::set(value_, key, value));
       }
 
+      template<typename Iteratee>
+      auto map(const Iteratee& iteratee) {
+        return lodash::Chain(lodash::map(value_, iteratee));
+      }
+
      private:
       T value_;
     };
