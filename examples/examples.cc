@@ -192,6 +192,18 @@ void ForEach() {
   assert(a == b);
 }
 
+void Map() {
+  std::vector<int> a = {1, 2, 3, 4};
+  std::vector<int> b = {2, 3, 4, 5};
+  std::vector<std::map<std::string, int>> c = {
+    {{"a", 1}, {"b", 2}},
+    {{"a", 2}, {"b", 3}},
+    {{"a", 3}, {"b", 4}},
+    {{"a", 4}, {"b", 5}},
+  };
+  assert(a == _.map(c, "a"));
+}
+
 int main() {
   First();
   Head();
@@ -212,4 +224,5 @@ int main() {
   Property();
   Iteratee();
   ForEach();
+  Map();
 }

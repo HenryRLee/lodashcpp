@@ -5,12 +5,14 @@
 #include <any>
 #include <variant>
 #include <functional>
+#include <algorithm>
 
 namespace lodash {
   class lodash {
     template<typename T> class Chain;
     template<typename T> struct is_string;
     template<typename T> struct is_primitive;
+    template<template<typename...> typename Array, typename V> struct convert_array;
    public:
     template<typename T>
     static Chain<T> chain(T value) { return Chain<T>(value); }
@@ -196,12 +198,24 @@ namespace lodash {
 
     constexpr static auto each = [](auto& collection,
                                     const auto& iteratee = lodash::identity) {
-      for (auto it = collection.begin(); it != collection.end(); it++) {
-        *it = iteratee(*it);
-      }
+      std::transform(collection.begin(), collection.end(),
+                     collection.begin(), lodash::iteratee(iteratee));
     };
 
     constexpr static auto forEach = each;
+
+    template<template<typename...> typename Collection,
+             typename Iteratee, typename... Args>
+    constexpr static auto map(const Collection<Args...>& collection, Iteratee iteratee) {
+
+      typedef decltype(lodash::iteratee(iteratee)(
+            std::declval<typename Collection<Args...>::value_type>())) newValueType;
+      typename convert_array<Collection, newValueType>::type newCollection(collection.size());
+
+      std::transform(collection.begin(), collection.end(),
+                     newCollection.begin(), lodash::iteratee(iteratee));
+      return newCollection;
+    }
 
    private:
     template<typename T>
@@ -264,6 +278,11 @@ namespace lodash {
                                                  std::is_arithmetic<T>::value ||
                                                  std::is_enum<T>::value ||
                                                  is_string<T>::value> {};
+
+    template<template<typename...> typename Array, typename V>
+    struct convert_array {
+      typedef Array<V> type;
+    };
   };
 
   lodash _;
