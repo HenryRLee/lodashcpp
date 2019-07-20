@@ -13,7 +13,7 @@ namespace lodash {
     template<typename T> struct is_string;
     template<typename T> struct is_primitive;
     template<template<typename...> typename Array, typename V>
-      struct convert_array;
+      struct transform_array;
    public:
     template<typename T>
     static Chain<T> chain(T value) { return Chain<T>(value); }
@@ -206,14 +206,31 @@ namespace lodash {
     constexpr static auto forEach = each;
 
     template<template<typename...> typename Collection,
-             typename Iteratee, typename... Args>
+             typename Iteratee, typename... Args,
+             typename NewValueType =
+               decltype(lodash::iteratee(std::declval<Iteratee>())(
+                 std::declval<typename Collection<Args...>::value_type>())),
+             typename std::enable_if_t<std::is_same<NewValueType,
+               typename Collection<Args...>::value_type>::value, int> = 0>
     constexpr static auto map(const Collection<Args...>& collection,
-                              Iteratee iteratee) {
+                              const Iteratee& iteratee) {
+      Collection<Args...> newCollection(collection.size());
 
-      typedef decltype(lodash::iteratee(iteratee)(
-          std::declval<typename Collection<Args...>::value_type>()))
-          newValueType;
-      typename convert_array<Collection, newValueType>::type
+      std::transform(collection.begin(), collection.end(),
+                     newCollection.begin(), lodash::iteratee(iteratee));
+      return newCollection;
+    }
+
+    template<template<typename...> typename Collection,
+             typename Iteratee, typename... Args,
+             typename NewValueType =
+               decltype(lodash::iteratee(std::declval<Iteratee>())(
+                 std::declval<typename Collection<Args...>::value_type>())),
+             typename std::enable_if_t<!std::is_same<NewValueType,
+               typename Collection<Args...>::value_type>::value, int> = 0>
+    constexpr static auto map(const Collection<Args...>& collection,
+                              const Iteratee& iteratee) {
+      typename transform_array<Collection, NewValueType>::type
           newCollection(collection.size());
 
       std::transform(collection.begin(), collection.end(),
@@ -284,7 +301,7 @@ namespace lodash {
                                                  is_string<T>::value> {};
 
     template<template<typename...> typename Array, typename V>
-    struct convert_array {
+    struct transform_array {
       typedef Array<V> type;
     };
   };

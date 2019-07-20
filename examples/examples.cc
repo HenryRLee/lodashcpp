@@ -202,6 +202,9 @@ void Map() {
     {{"a", 4}, {"b", 5}},
   };
   assert(a == _.map(c, "a"));
+  assert(b == _.map(c, "b"));
+
+  assert(b == _.map(a, [](int n) { return n + 1; }));
 }
 
 int main() {
