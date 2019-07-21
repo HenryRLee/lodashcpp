@@ -231,6 +231,16 @@ void Map() {
   assert(b == _.chain(a).map([](int n) { return n + 1; }).value());
 }
 
+void GroupBy() {
+  std::vector<double> v = {6.1, 4.2, 6.3};
+  std::map<long long, std::vector<double>> m = {
+    {4, {4.2}},
+    {6, {6.1, 6.3}},
+  };
+
+  assert(m == _.groupBy(v, _.floor));
+}
+
 int main() {
   Ceil();
   Floor();
@@ -254,4 +264,5 @@ int main() {
   Iteratee();
   ForEach();
   Map();
+  GroupBy();
 }

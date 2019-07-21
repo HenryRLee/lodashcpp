@@ -20,8 +20,7 @@ namespace lodash {
 
     // Math
 
-    template<typename Number>
-    constexpr static long long ceil(const Number& num) {
+    constexpr static long long ceil(const long double& num) {
       if (num >= 0) {
         return (num * 10 - 1) / 10 + 1;
       } else {
@@ -29,8 +28,7 @@ namespace lodash {
       }
     }
 
-    template<typename Number>
-    constexpr static long long floor(const Number& num) {
+    constexpr static long long floor(const long double& num) {
       if (num >= 0) {
         return num;
       } else {
@@ -240,6 +238,20 @@ namespace lodash {
                      newCollection.begin(), lodash::iteratee(iteratee));
       return newCollection;
     }
+
+    template<typename Collection, typename Iteratee>
+    constexpr static auto groupBy(const Collection& collection,
+                                  const Iteratee& iteratee = lodash::identity) {
+      typedef typename Collection::value_type ValueType;
+      typedef decltype(lodash::iteratee(std::declval<Iteratee>())(
+          std::declval<ValueType>())) KeyType;
+
+      std::map<KeyType, std::vector<ValueType>> ret;
+      for (auto it = collection.begin(); it != collection.end(); it++) {
+        ret[lodash::iteratee(iteratee)(*it)].push_back(*it);
+      }
+      return ret;
+    };
 
     template<template<typename...> typename Collection,
              typename Iteratee, typename... Args,
