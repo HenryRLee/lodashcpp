@@ -6,6 +6,26 @@
 
 using namespace lodash;
 
+void Ceil() {
+  assert(3 == _.ceil(2.4));
+  assert(4 == _.ceil(4.0));
+  assert(4 == _.ceil(4));
+
+  assert(-3 == _.ceil(-3.4));
+  assert(-6 == _.ceil(-6.0));
+  assert(-6 == _.ceil(-6));
+}
+
+void Floor() {
+  assert(2 == _.floor(2.4));
+  assert(4 == _.ceil(4.0));
+  assert(4 == _.ceil(4));
+
+  assert(-5 == _.floor(-4.9));
+  assert(-7 == _.floor(-7.0));
+  assert(-7 == _.floor(-7));
+}
+
 void First() {
   std::vector<int> a{1, 2, 3};
 
@@ -212,6 +232,8 @@ void Map() {
 }
 
 int main() {
+  Ceil();
+  Floor();
   First();
   Head();
   Last();

@@ -18,6 +18,26 @@ namespace lodash {
     template<typename T>
     static Chain<T> chain(T value) { return Chain<T>(value); }
 
+    // Math
+
+    template<typename Number>
+    constexpr static long long ceil(const Number& num) {
+      if (num >= 0) {
+        return (num * 10 - 1) / 10 + 1;
+      } else {
+        return -floor(-num);
+      }
+    }
+
+    template<typename Number>
+    constexpr static long long floor(const Number& num) {
+      if (num >= 0) {
+        return num;
+      } else {
+        return -ceil(-num);
+      }
+    }
+
     // Array
 
     constexpr static auto first = [](const auto& array) {
