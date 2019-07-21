@@ -239,6 +239,8 @@ void GroupBy() {
   };
 
   assert(m == _.groupBy(v, _.floor));
+
+  assert(m == _.chain(v).groupBy(_.floor).value());
 }
 
 int main() {

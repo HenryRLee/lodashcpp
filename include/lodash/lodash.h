@@ -320,6 +320,11 @@ namespace lodash {
       }
 
       template<typename Iteratee>
+      auto groupBy(const Iteratee& iteratee) {
+        return lodash::Chain(lodash::groupBy(value_, iteratee));
+      }
+
+      template<typename Iteratee>
       auto map(const Iteratee& iteratee) {
         return lodash::Chain(lodash::map(value_, iteratee));
       }
