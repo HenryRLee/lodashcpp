@@ -6,6 +6,28 @@
 
 using namespace lodash;
 
+void Add() {
+  assert(3 == _.add(1, 2));
+  assert(5.5 == _.add(2.1, 3.4));
+}
+
+void Subtract() {
+  assert(3 == _.subtract(5, 2));
+  assert(5.5 == _.subtract(7.8, 2.3));
+}
+
+void Multiply() {
+  assert(8 == _.multiply(4, 2));
+  assert(8.4 == _.multiply(4, 2.1));
+}
+
+void Divide() {
+  assert(3 == _.divide(15, 5));
+  assert(3 == _.divide(15.0, 5));
+  assert(2.5 == _.divide(5, 2));
+  assert(2.5 == _.divide(5.0, 2));
+}
+
 void Ceil() {
   assert(3 == _.ceil(2.4));
   assert(4 == _.ceil(4.0));
@@ -261,6 +283,10 @@ void Reduce() {
 }
 
 int main() {
+  Add();
+  Subtract();
+  Multiply();
+  Divide();
   Ceil();
   Floor();
   First();
