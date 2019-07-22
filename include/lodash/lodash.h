@@ -6,6 +6,7 @@
 #include <variant>
 #include <functional>
 #include <algorithm>
+#include <numeric>
 
 namespace lodash {
   class lodash {
@@ -268,6 +269,16 @@ namespace lodash {
       std::transform(collection.begin(), collection.end(),
                      newCollection.begin(), lodash::iteratee(iteratee));
       return newCollection;
+    }
+
+    template<typename Collection,
+             typename Iteratee,
+             typename ValueType = typename Collection::value_type>
+    constexpr static auto reduce(const Collection& collection,
+                                 const Iteratee& iteratee,
+                                 const ValueType& accumulator = ValueType()) {
+      return std::reduce(collection.begin(), collection.end(),
+                         accumulator, lodash::iteratee(iteratee));
     }
 
    private:

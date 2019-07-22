@@ -248,6 +248,18 @@ void Map() {
   assert(b == _.chain(a).map([](int n) { return n + 1; }).value());
 }
 
+void Reduce() {
+  std::vector<int> a = {1, 2, 3, 4};
+
+  auto add = [](auto l, auto r) { return l + r; };
+
+  assert(10 == _.reduce(a, add, 0));
+
+  auto multi = [](auto l, auto r) { return l * r; };
+
+  assert(24 == _.reduce(a, multi, 1));
+}
+
 int main() {
   Ceil();
   Floor();
@@ -272,4 +284,5 @@ int main() {
   ForEach();
   GroupBy();
   Map();
+  Reduce();
 }
