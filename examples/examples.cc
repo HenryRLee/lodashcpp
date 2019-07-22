@@ -212,6 +212,18 @@ void ForEach() {
   assert(a == b);
 }
 
+void GroupBy() {
+  std::vector<double> v = {6.1, 4.2, 6.3};
+  std::map<long long, std::vector<double>> m = {
+    {4, {4.2}},
+    {6, {6.1, 6.3}},
+  };
+
+  assert(m == _.groupBy(v, _.floor));
+
+  assert(m == _.chain(v).groupBy(_.floor).value());
+}
+
 void Map() {
   std::vector<int> a = {1, 2, 3, 4};
   std::vector<int> b = {2, 3, 4, 5};
@@ -236,18 +248,6 @@ void Map() {
   assert(b == _.chain(a).map([](int n) { return n + 1; }).value());
 }
 
-void GroupBy() {
-  std::vector<double> v = {6.1, 4.2, 6.3};
-  std::map<long long, std::vector<double>> m = {
-    {4, {4.2}},
-    {6, {6.1, 6.3}},
-  };
-
-  assert(m == _.groupBy(v, _.floor));
-
-  assert(m == _.chain(v).groupBy(_.floor).value());
-}
-
 int main() {
   Ceil();
   Floor();
@@ -270,6 +270,6 @@ int main() {
   Property();
   Iteratee();
   ForEach();
-  Map();
   GroupBy();
+  Map();
 }
