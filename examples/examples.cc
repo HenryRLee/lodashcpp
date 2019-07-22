@@ -215,6 +215,11 @@ void ForEach() {
 void Map() {
   std::vector<int> a = {1, 2, 3, 4};
   std::vector<int> b = {2, 3, 4, 5};
+
+  auto addOne = [](int n) { return n + 1; };
+
+  assert(b == _.map(a, addOne));
+
   std::vector<std::map<std::string, int>> c = {
     {{"a", 1}, {"b", 2}},
     {{"a", 2}, {"b", 3}},
