@@ -240,6 +240,20 @@ namespace lodash {
       }
     }
 
+    constexpr static auto sumBy = [](const auto& array,
+                                     const auto& iteratee) {
+      typedef typename std::remove_reference<decltype(array)>::type Array;
+      typename Array::value_type ret = 0;
+      for (auto it = array.begin(); it != array.end(); it++) {
+        ret += lodash::iteratee(iteratee)(*it);
+      }
+      return ret;
+    };
+
+    constexpr static auto sum = [](const auto& array) {
+      return lodash::sumBy(array, lodash::identity);
+    };
+
     // Collection
 
     constexpr static auto each = [](auto& collection,

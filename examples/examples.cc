@@ -225,6 +225,20 @@ void Floor() {
   assert(-7 == _.floor(-7));
 }
 
+void SumBy() {
+  std::vector<int> a = {0, 1, 2, 3};
+
+  auto addOne = [](auto n) { return n + 1; };
+
+  assert(10 == _.sumBy(a, addOne));
+}
+
+void Sum() {
+  std::vector<int> a = {1, 2, 3, 4};
+
+  assert(10 == _.sum(a));
+}
+
 void ForEach() {
   std::vector<int> a = {1, 2, 3, 4};
   std::vector<int> b = {2, 3, 4, 5};
@@ -309,6 +323,8 @@ int main() {
   Divide();
   Ceil();
   Floor();
+  SumBy();
+  Sum();
   ForEach();
   GroupBy();
   Map();
