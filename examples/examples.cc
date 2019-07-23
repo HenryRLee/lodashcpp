@@ -276,10 +276,12 @@ void Reduce() {
   auto add = [](auto l, auto r) { return l + r; };
 
   assert(10 == _.reduce(a, add, 0));
+  assert(10 == _.chain(a).reduce(add, 0).value());
 
   auto multi = [](auto l, auto r) { return l * r; };
 
   assert(24 == _.reduce(a, multi, 1));
+  assert(24 == _.chain(a).reduce(multi, 1).value());
 }
 
 int main() {

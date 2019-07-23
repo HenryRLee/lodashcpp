@@ -366,6 +366,11 @@ namespace lodash {
         return lodash::Chain(lodash::map(value_, iteratee));
       }
 
+      template<typename Iteratee, typename Value>
+      auto reduce(const Iteratee& iteratee, const Value& accumulator) {
+        return lodash::Chain(lodash::reduce(value_, iteratee, accumulator));
+      }
+
      private:
       T value_;
     };
