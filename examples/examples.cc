@@ -6,48 +6,6 @@
 
 using namespace lodash;
 
-void Add() {
-  assert(3 == _.add(1, 2));
-  assert(5.5 == _.add(2.1, 3.4));
-}
-
-void Subtract() {
-  assert(3 == _.subtract(5, 2));
-  assert(5.5 == _.subtract(7.8, 2.3));
-}
-
-void Multiply() {
-  assert(8 == _.multiply(4, 2));
-  assert(8.4 == _.multiply(4, 2.1));
-}
-
-void Divide() {
-  assert(3 == _.divide(15, 5));
-  assert(3 == _.divide(15.0, 5));
-  assert(2.5 == _.divide(5, 2));
-  assert(2.5 == _.divide(5.0, 2));
-}
-
-void Ceil() {
-  assert(3 == _.ceil(2.4));
-  assert(4 == _.ceil(4.0));
-  assert(4 == _.ceil(4));
-
-  assert(-3 == _.ceil(-3.4));
-  assert(-6 == _.ceil(-6.0));
-  assert(-6 == _.ceil(-6));
-}
-
-void Floor() {
-  assert(2 == _.floor(2.4));
-  assert(4 == _.ceil(4.0));
-  assert(4 == _.ceil(4));
-
-  assert(-5 == _.floor(-4.9));
-  assert(-7 == _.floor(-7.0));
-  assert(-7 == _.floor(-7));
-}
-
 void First() {
   std::vector<int> a{1, 2, 3};
 
@@ -225,6 +183,48 @@ void Iteratee() {
   assert(3 == func(a));
 }
 
+void Add() {
+  assert(3 == _.add(1, 2));
+  assert(5.5 == _.add(2.1, 3.4));
+}
+
+void Subtract() {
+  assert(3 == _.subtract(5, 2));
+  assert(5.5 == _.subtract(7.8, 2.3));
+}
+
+void Multiply() {
+  assert(8 == _.multiply(4, 2));
+  assert(8.4 == _.multiply(4, 2.1));
+}
+
+void Divide() {
+  assert(3 == _.divide(15, 5));
+  assert(3 == _.divide(15.0, 5));
+  assert(2.5 == _.divide(5, 2));
+  assert(2.5 == _.divide(5.0, 2));
+}
+
+void Ceil() {
+  assert(3 == _.ceil(2.4));
+  assert(4 == _.ceil(4.0));
+  assert(4 == _.ceil(4));
+
+  assert(-3 == _.ceil(-3.4));
+  assert(-6 == _.ceil(-6.0));
+  assert(-6 == _.ceil(-6));
+}
+
+void Floor() {
+  assert(2 == _.floor(2.4));
+  assert(4 == _.ceil(4.0));
+  assert(4 == _.ceil(4));
+
+  assert(-5 == _.floor(-4.9));
+  assert(-7 == _.floor(-7.0));
+  assert(-7 == _.floor(-7));
+}
+
 void ForEach() {
   std::vector<int> a = {1, 2, 3, 4};
   std::vector<int> b = {2, 3, 4, 5};
@@ -285,12 +285,6 @@ void Reduce() {
 }
 
 int main() {
-  Add();
-  Subtract();
-  Multiply();
-  Divide();
-  Ceil();
-  Floor();
   First();
   Head();
   Last();
@@ -309,6 +303,12 @@ int main() {
   MatchesProperty();
   Property();
   Iteratee();
+  Add();
+  Subtract();
+  Multiply();
+  Divide();
+  Ceil();
+  Floor();
   ForEach();
   GroupBy();
   Map();

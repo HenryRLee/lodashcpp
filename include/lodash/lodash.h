@@ -19,50 +19,6 @@ namespace lodash {
     template<typename T>
     static Chain<T> chain(T value) { return Chain<T>(value); }
 
-    // Math
-
-    constexpr static auto add = [](const auto& a, const auto& b) {
-      return a + b;
-    };
-
-    constexpr static auto subtract = [](const auto& a, const auto& b) {
-      return a - b;
-    };
-
-    constexpr static auto multiply = [](const auto& a, const auto& b) {
-      return a * b;
-    };
-
-    template<typename N1, typename N2,
-             std::enable_if_t<std::is_integral<N1>::value &&
-                              std::is_integral<N2>::value, int> = 0>
-    constexpr static auto divide(const N1& a, const N2& b) {
-      return (long double)a / b;
-    }
-
-    template<typename N1, typename N2,
-             std::enable_if_t<!std::is_integral<N1>::value ||
-                              !std::is_integral<N2>::value, int> = 0>
-    constexpr static auto divide(const N1& a, const N2& b) {
-      return a / b;
-    }
-
-    constexpr static long long ceil(const long double& num) {
-      if (num >= 0) {
-        return (num * 10 - 1) / 10 + 1;
-      } else {
-        return -floor(-num);
-      }
-    }
-
-    constexpr static long long floor(const long double& num) {
-      if (num >= 0) {
-        return num;
-      } else {
-        return -ceil(-num);
-      }
-    }
-
     // Array
 
     constexpr static auto first = [](const auto& array) {
@@ -238,6 +194,50 @@ namespace lodash {
              std::enable_if_t<!lodash::is_primitive<Fn>::value, int> = 0>
     constexpr static auto iteratee(Fn func) {
       return func;
+    }
+
+    // Math
+
+    constexpr static auto add = [](const auto& a, const auto& b) {
+      return a + b;
+    };
+
+    constexpr static auto subtract = [](const auto& a, const auto& b) {
+      return a - b;
+    };
+
+    constexpr static auto multiply = [](const auto& a, const auto& b) {
+      return a * b;
+    };
+
+    template<typename N1, typename N2,
+             std::enable_if_t<std::is_integral<N1>::value &&
+                              std::is_integral<N2>::value, int> = 0>
+    constexpr static auto divide(const N1& a, const N2& b) {
+      return (long double)a / b;
+    }
+
+    template<typename N1, typename N2,
+             std::enable_if_t<!std::is_integral<N1>::value ||
+                              !std::is_integral<N2>::value, int> = 0>
+    constexpr static auto divide(const N1& a, const N2& b) {
+      return a / b;
+    }
+
+    constexpr static long long ceil(const long double& num) {
+      if (num >= 0) {
+        return (num * 10 - 1) / 10 + 1;
+      } else {
+        return -floor(-num);
+      }
+    }
+
+    constexpr static long long floor(const long double& num) {
+      if (num >= 0) {
+        return num;
+      } else {
+        return -ceil(-num);
+      }
     }
 
     // Collection
