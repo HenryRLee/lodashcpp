@@ -231,6 +231,9 @@ void SumBy() {
   auto addOne = [](auto n) { return n + 1; };
 
   assert(10 == _.sumBy(a, addOne));
+
+  auto sum = _.partialRight(_.sumBy, _.identity);
+  assert(6 == sum(a));
 }
 
 void Sum() {
