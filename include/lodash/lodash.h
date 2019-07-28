@@ -258,6 +258,15 @@ namespace lodash {
       return lodash::sumBy(array, lodash::identity);
     };
 
+    constexpr static auto meanBy = [](const auto& array,
+                                      const auto& iteratee) {
+      return lodash::divide(lodash::sumBy(array, iteratee), array.size());
+    };
+
+    constexpr static auto mean = [](const auto& array) {
+      return lodash::meanBy(array, lodash::identity);
+    };
+
     // Collection
 
     constexpr static auto each = [](auto& collection,

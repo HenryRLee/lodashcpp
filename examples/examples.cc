@@ -242,6 +242,23 @@ void Sum() {
   assert(10 == _.sum(a));
 }
 
+void MeanBy() {
+  std::vector<std::map<std::string, int>> a = {
+    {{"a", 1}},
+    {{"a", 3}},
+    {{"a", 4}},
+    {{"a", 5}},
+  };
+
+  assert(3.25 == _.meanBy(a, "a"));
+}
+
+void Mean() {
+  std::vector<int> a = {1, 3, 4, 5};
+
+  assert(3.25 == _.mean(a));
+}
+
 void ForEach() {
   std::vector<int> a = {1, 2, 3, 4};
   std::vector<int> b = {2, 3, 4, 5};
@@ -328,6 +345,8 @@ int main() {
   Floor();
   SumBy();
   Sum();
+  MeanBy();
+  Mean();
   ForEach();
   GroupBy();
   Map();
