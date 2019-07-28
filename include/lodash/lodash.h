@@ -243,7 +243,11 @@ namespace lodash {
     constexpr static auto sumBy = [](const auto& array,
                                      const auto& iteratee) {
       typedef typename std::remove_reference<decltype(array)>::type Array;
-      typename Array::value_type ret = 0;
+      typedef decltype(lodash::iteratee(iteratee)(
+          std::declval<typename Array::value_type>()))
+            NewValueType;
+
+      NewValueType ret = 0;
       for (auto it = array.begin(); it != array.end(); it++) {
         ret += lodash::iteratee(iteratee)(*it);
       }
