@@ -31,7 +31,7 @@ namespace lodash {
       return array.back();
     };
 
-    constexpr static auto take = [](const auto& array, int n = 1) {
+    constexpr static auto take = [](int n, const auto& array) {
       typedef typename std::remove_reference<decltype(array)>::type array_type;
       return array_type(array.begin(), array.begin() + n);
     };
@@ -39,7 +39,7 @@ namespace lodash {
     // Object
 
     constexpr static auto get =
-      [](const auto& object, const auto& key) {
+      [](const auto& key, const auto& object) {
       typedef typename
         std::remove_reference<decltype(object)>::type::mapped_type mapped_type;
       if (object.find(key) != object.end()) {
@@ -50,26 +50,26 @@ namespace lodash {
     };
 
     constexpr static auto has =
-      [](const auto& object, const auto& key) {
+      [](const auto& key, const auto& object) {
       return object.find(key) != object.end();
     };
 
     constexpr static auto set =
-      [](auto& object, const auto& key, const auto& value) {
+      [](const auto& key, const auto& value, auto& object) {
       object[key] = value;
       return object;
     };
 
     // Lang
 
-    constexpr static auto isEqual = [](const auto& value, const auto& other) {
+    constexpr static auto isEqual = [](const auto& other, const auto& value) {
       return value == other;
     };
 
-    constexpr static auto isMatch = [](const auto& object, const auto& source) {
+    constexpr static auto isMatch = [](const auto& source, const auto& object) {
       for (auto it = source.begin(); it != source.end(); it++) {
         const auto& [key, value] = *it;
-        if (!lodash::isEqual(lodash::get(object, key), value))
+        if (!lodash::isEqual(lodash::get(key, object), value))
           return false;
       }
 
@@ -147,7 +147,7 @@ namespace lodash {
     constexpr static auto identity = [](const auto& any) { return any; };
 
     constexpr static auto matches = [](const auto& source) {
-      return lodash::partialRight(lodash::isMatch, source);
+      return lodash::partial(lodash::isMatch, source);
     };
 
     template<typename K, typename V,
@@ -171,7 +171,7 @@ namespace lodash {
     }
 
     constexpr static auto property = [](const auto& path) {
-      return lodash::partialRight(lodash::get, path);
+      return lodash::partial(lodash::get, path);
     };
 
     template<typename K, typename V>
@@ -240,8 +240,8 @@ namespace lodash {
       }
     }
 
-    constexpr static auto sumBy = [](const auto& array,
-                                     const auto& iteratee) {
+    constexpr static auto sumBy = [](const auto& iteratee,
+                                     const auto& array) {
       typedef typename std::remove_reference<decltype(array)>::type Array;
       typedef decltype(lodash::iteratee(iteratee)(
           std::declval<typename Array::value_type>()))
@@ -255,22 +255,22 @@ namespace lodash {
     };
 
     constexpr static auto sum = [](const auto& array) {
-      return lodash::sumBy(array, lodash::identity);
+      return lodash::sumBy(lodash::identity, array);
     };
 
-    constexpr static auto meanBy = [](const auto& array,
-                                      const auto& iteratee) {
-      return lodash::divide(lodash::sumBy(array, iteratee), array.size());
+    constexpr static auto meanBy = [](const auto& iteratee,
+                                      const auto& array) {
+      return lodash::divide(lodash::sumBy(iteratee, array), array.size());
     };
 
     constexpr static auto mean = [](const auto& array) {
-      return lodash::meanBy(array, lodash::identity);
+      return lodash::meanBy(lodash::identity, array);
     };
 
     // Collection
 
-    constexpr static auto each = [](auto& collection,
-                                    const auto& iteratee = lodash::identity) {
+    constexpr static auto each = [](const auto& iteratee,
+                                    auto& collection) {
       std::transform(collection.begin(), collection.end(),
                      collection.begin(), lodash::iteratee(iteratee));
     };
@@ -284,8 +284,8 @@ namespace lodash {
                  std::declval<typename Collection<Args...>::value_type>())),
              typename std::enable_if_t<std::is_same<NewValueType,
                typename Collection<Args...>::value_type>::value, int> = 0>
-    constexpr static auto map(const Collection<Args...>& collection,
-                              const Iteratee& iteratee) {
+    constexpr static auto map(const Iteratee& iteratee,
+                              const Collection<Args...>& collection) {
       Collection<Args...> newCollection(collection.size());
 
       std::transform(collection.begin(), collection.end(),
@@ -293,9 +293,26 @@ namespace lodash {
       return newCollection;
     }
 
+    template<template<typename...> typename Collection,
+             typename Iteratee, typename... Args,
+             typename NewValueType =
+               decltype(lodash::iteratee(std::declval<Iteratee>())(
+                 std::declval<typename Collection<Args...>::value_type>())),
+             typename std::enable_if_t<!std::is_same<NewValueType,
+               typename Collection<Args...>::value_type>::value, int> = 0>
+    constexpr static auto map(const Iteratee& iteratee,
+                              const Collection<Args...>& collection) {
+      typename transform_array<Collection, NewValueType>::type
+          newCollection(collection.size());
+
+      std::transform(collection.begin(), collection.end(),
+                     newCollection.begin(), lodash::iteratee(iteratee));
+      return newCollection;
+    }
+
     template<typename Collection, typename Iteratee>
-    constexpr static auto groupBy(const Collection& collection,
-                                  const Iteratee& iteratee = lodash::identity) {
+    constexpr static auto groupBy(const Iteratee& iteratee,
+                                  const Collection& collection) {
       typedef typename Collection::value_type ValueType;
       typedef decltype(lodash::iteratee(std::declval<Iteratee>())(
           std::declval<ValueType>())) KeyType;
@@ -307,29 +324,12 @@ namespace lodash {
       return ret;
     };
 
-    template<template<typename...> typename Collection,
-             typename Iteratee, typename... Args,
-             typename NewValueType =
-               decltype(lodash::iteratee(std::declval<Iteratee>())(
-                 std::declval<typename Collection<Args...>::value_type>())),
-             typename std::enable_if_t<!std::is_same<NewValueType,
-               typename Collection<Args...>::value_type>::value, int> = 0>
-    constexpr static auto map(const Collection<Args...>& collection,
-                              const Iteratee& iteratee) {
-      typename transform_array<Collection, NewValueType>::type
-          newCollection(collection.size());
-
-      std::transform(collection.begin(), collection.end(),
-                     newCollection.begin(), lodash::iteratee(iteratee));
-      return newCollection;
-    }
-
     template<typename Collection,
              typename Iteratee,
              typename ValueType = typename Collection::value_type>
-    constexpr static auto reduce(const Collection& collection,
-                                 const Iteratee& iteratee,
-                                 const ValueType& accumulator = ValueType()) {
+    constexpr static auto reduce(const Iteratee& iteratee,
+                                 const ValueType& accumulator,
+                                 const Collection& collection) {
       return std::reduce(collection.begin(), collection.end(),
                          accumulator, lodash::iteratee(iteratee));
     }
@@ -362,7 +362,7 @@ namespace lodash {
       }
 
       auto take(int n = 1) {
-        value_ = lodash::take(value_, n);
+        value_ = lodash::take(n, value_);
         return *this;
       }
 
@@ -370,32 +370,32 @@ namespace lodash {
 
       template<typename K>
       auto get(const K& key) {
-        return lodash::Chain(lodash::get(value_, key));
+        return lodash::Chain(lodash::get(key, value_));
       }
 
       template<typename K>
       auto has(const K& key) {
-        return lodash::Chain(lodash::has(value_, key));
+        return lodash::Chain(lodash::has(key, value_));
       }
 
       template<typename K, typename V>
       auto set(const K& key, const V& value) {
-        return lodash::Chain(lodash::set(value_, key, value));
+        return lodash::Chain(lodash::set(key, value, value_));
       }
 
       template<typename Iteratee>
       auto groupBy(const Iteratee& iteratee) {
-        return lodash::Chain(lodash::groupBy(value_, iteratee));
+        return lodash::Chain(lodash::groupBy(iteratee, value_));
       }
 
       template<typename Iteratee>
       auto map(const Iteratee& iteratee) {
-        return lodash::Chain(lodash::map(value_, iteratee));
+        return lodash::Chain(lodash::map(iteratee, value_));
       }
 
       template<typename Iteratee, typename Value>
       auto reduce(const Iteratee& iteratee, const Value& accumulator) {
-        return lodash::Chain(lodash::reduce(value_, iteratee, accumulator));
+        return lodash::Chain(lodash::reduce(iteratee, accumulator, value_));
       }
 
      private:

@@ -63,8 +63,8 @@ void IsMatch() {
   std::map<std::string, int> b = {{"a", 1}, {"b", 2}};
   std::map<std::string, int> c = {{"b", 1}, {"c", 2}};
 
-  assert(_.isMatch(a, b));
-  assert(!_.isMatch(a, c));
+  assert(_.isMatch(b, a));
+  assert(!_.isMatch(c, a));
 }
 
 void Curry() {
@@ -178,7 +178,7 @@ void Iteratee() {
   assert(matchesProperty(a));
 
   auto func = _.iteratee([](const auto& object) {
-    return _.get(object, "a") + _.get(object, "b");
+    return _.get("a", object) + _.get("b", object);
   });
   assert(3 == func(a));
 }
@@ -230,9 +230,9 @@ void SumBy() {
 
   auto addOne = [](auto n) { return n + 1; };
 
-  assert(10 == _.sumBy(a, addOne));
+  assert(10 == _.sumBy(addOne, a));
 
-  auto sum = _.partialRight(_.sumBy, _.identity);
+  auto sum = _.partial(_.sumBy, _.identity);
   assert(6 == sum(a));
 }
 
@@ -250,7 +250,7 @@ void MeanBy() {
     {{"a", 5}},
   };
 
-  assert(3.25 == _.meanBy(a, "a"));
+  assert(3.25 == _.meanBy("a", a));
 }
 
 void Mean() {
@@ -263,7 +263,7 @@ void ForEach() {
   std::vector<int> a = {1, 2, 3, 4};
   std::vector<int> b = {2, 3, 4, 5};
 
-  _.forEach(a, [](int n) { return n + 1; });
+  _.forEach([](int n) { return n + 1; }, a);
 
   assert(a == b);
 }
@@ -275,7 +275,7 @@ void GroupBy() {
     {6, {6.1, 6.3}},
   };
 
-  assert(m == _.groupBy(v, _.floor));
+  assert(m == _.groupBy(_.floor, v));
 
   assert(m == _.chain(v).groupBy(_.floor).value());
 }
@@ -286,7 +286,7 @@ void Map() {
 
   auto addOne = [](int n) { return n + 1; };
 
-  assert(b == _.map(a, addOne));
+  assert(b == _.map(addOne, a));
 
   std::vector<std::map<std::string, int>> c = {
     {{"a", 1}, {"b", 2}},
@@ -294,10 +294,10 @@ void Map() {
     {{"a", 3}, {"b", 4}},
     {{"a", 4}, {"b", 5}},
   };
-  assert(a == _.map(c, "a"));
-  assert(b == _.map(c, "b"));
+  assert(a == _.map("a", c));
+  assert(b == _.map("b", c));
 
-  assert(b == _.map(a, [](int n) { return n + 1; }));
+  assert(b == _.map([](int n) { return n + 1; }, a));
 
   assert(a == _.chain(c).map("a").value());
   assert(b == _.chain(c).map("b").value());
@@ -309,12 +309,12 @@ void Reduce() {
 
   auto add = [](auto l, auto r) { return l + r; };
 
-  assert(10 == _.reduce(a, add, 0));
+  assert(10 == _.reduce(add, 0, a));
   assert(10 == _.chain(a).reduce(add, 0).value());
 
   auto multi = [](auto l, auto r) { return l * r; };
 
-  assert(24 == _.reduce(a, multi, 1));
+  assert(24 == _.reduce(multi, 1, a));
   assert(24 == _.chain(a).reduce(multi, 1).value());
 }
 
